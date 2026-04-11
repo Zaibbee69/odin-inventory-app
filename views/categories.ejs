@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Categories — Papa's Pizzeria</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #c0392b;
+      --red-dark: #962d22;
+      --cream: #fdf6ec;
+      --warm-white: #fffaf4;
+      --charcoal: #1a1a1a;
+      --muted: #7a6a5a;
+      --border: #e8d9c5;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--warm-white);
+      color: var(--charcoal);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      background: var(--charcoal);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: var(--cream);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 0.25rem;
+      flex: 1;
+    }
+
+    .nav-links a {
+      color: #bbb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: var(--cream);
+      background: rgba(255,255,255,0.08);
+    }
+
+    .nav-search {
+      display: flex;
+      gap: 0.5rem;
+      margin-left: auto;
+    }
+
+    .nav-search input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 8px;
+      padding: 0.45rem 1rem;
+      color: var(--cream);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      width: 200px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .nav-search input::placeholder { color: #888; }
+    .nav-search input:focus { border-color: var(--red); }
+
+    .nav-search button {
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      padding: 0.45rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .nav-search button:hover { background: var(--red-dark); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--charcoal);
+      padding: 3rem 2rem 2.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .page-header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .page-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 900;
+      color: var(--cream);
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .page-header h1 span { color: var(--red); }
+    .page-header p { color: #999; font-size: 0.9rem; margin-top: 0.4rem; font-weight: 300; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--red);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 0.75rem 1.4rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-primary:hover { background: var(--red-dark); transform: translateY(-1px); }
+
+    /* ── MAIN ── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem 2rem;
+      flex: 1;
+    }
+
+    /* ── FLASH ── */
+    .flash {
+      padding: 0.85rem 1.25rem;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .flash.success { background: #edfaf3; color: #1e7e4a; border: 1px solid #b7eacf; }
+    .flash.error   { background: #fff5f5; color: var(--red);   border: 1px solid #f5c6c6; }
+
+    /* ── SECTION HEADERS ── */
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-heading h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    .section-divider {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── CATEGORIES GRID ── */
+    .categories-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 3rem;
+    }
+
+    .category-card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+    }
+
+    .category-card:hover {
+      border-color: #d4bfac;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+    }
+
+    .card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.75rem;
+    }
+
+    .card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--charcoal);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1.5px solid var(--border);
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.82rem;
+      text-decoration: none;
+      color: var(--muted);
+      transition: all 0.15s;
+    }
+
+    .action-btn:hover { border-color: #aaa; color: var(--charcoal); }
+    .action-btn.delete:hover { border-color: var(--red); color: var(--red); background: #fff5f5; }
+
+    /* Pizza count badge */
+    .pizza-count {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--muted);
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 0.25rem 0.75rem;
+      width: fit-content;
+    }
+
+    /* Pizza name pills */
+    .pizza-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pizza-pill {
+      font-size: 0.78rem;
+      font-weight: 400;
+      color: var(--charcoal);
+      background: var(--warm-white);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.2rem 0.6rem;
+      text-decoration: none;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .pizza-pill:hover {
+      border-color: var(--red);
+      color: var(--red);
+    }
+
+    .no-pizzas {
+      font-size: 0.82rem;
+      color: #bbb;
+      font-style: italic;
+    }
+
+    /* View all link */
+    .card-footer {
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .view-link {
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--red);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      transition: gap 0.15s;
+    }
+
+    .view-link:hover { gap: 0.55rem; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--muted);
+    }
+
+    .empty-state .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.95rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      color: #777;
+      text-align: center;
+      padding: 1.2rem 2rem;
+      font-size: 0.82rem;
+    }
+
+    @media (max-width: 700px) {
+      .nav-search { display: none; }
+      .categories-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <%# ─── NAVBAR ─── %>
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="/">🍕 Papa's Pizzeria</a>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/menu">Menu</a></li>
+        <li><a href="/toppings">Toppings</a></li>
+        <li><a href="/categories" class="active">Categories</a></li>
+      </ul>
+      <form class="nav-search" role="search" action="/menu/search" method="GET">
+        <input type="search" placeholder="Search the menu..." name="search">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
+
+  <%# ─── PAGE HEADER ─── %>
+  <div class="page-header">
+    <div class="page-header-inner">
+      <div>
+        <h1>Pizza <span>Categories</span></h1>
+        <p>Organise your menu into collections</p>
+      </div>
+      <a href="/categories/new" class="btn-primary">+ Add Category</a>
+    </div>
+  </div>
+
+  <%# ─── MAIN ─── %>
+  <div class="container">
+
+    <%# Flash messages — set via res.locals in Express %>
+    <% if (locals.flash) { %>
+      <div class="flash <%= flash.type %>"><%= flash.message %></div>
+    <% } %>
+
+    <%#
+      Expected data from Express:
+      categories — array of objects:
+        [
+          {
+            id,
+            name,
+            pizzas: [ { id, name }, ... ]   ← pizzas belonging to this category
+          },
+          ...
+        ]
+    %>
+
+    <% if (categories.length === 0) { %>
+      <div class="empty-state">
+        <div class="empty-icon">🍕</div>
+        <p>No categories yet. Add your first one!</p>
+      </div>
+
+    <% } else { %>
+
+      <div class="section-heading">
+        <h2>All Categories</h2>
+        <div class="section-divider"></div>
+        <span style="font-size:0.82rem; color:var(--muted); white-space:nowrap;">
+          <%= categories.length %> total
+        </span>
+      </div>
+
+      <div class="categories-grid">
+        <% categories.forEach(function(category) { %>
+          <div class="category-card">
+
+            <div class="card-top">
+              <div class="card-name"><%= category.name %></div>
+              <div class="card-actions">
+                <a href="/categories/<%= category.id %>/edit" class="action-btn" title="Edit">✏️</a>
+                <form action="/categories/<%= category.id %>?_method=DELETE" method="POST">
+                  <button type="submit" class="action-btn delete" title="Delete"
+                    onclick="return confirm('Delete the <%= category.name %> category?')">🗑</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="pizza-count">
+              🍕 <%= category.pizzas.length %> <%= category.pizzas.length === 1 ? 'pizza' : 'pizzas' %>
+            </div>
+
+            <% if (category.pizzas.length > 0) { %>
+              <div class="pizza-list">
+                <% category.pizzas.forEach(function(pizza) { %>
+                  <a href="/menu/<%= pizza.id %>" class="pizza-pill"><%= pizza.name %></a>
+                <% }); %>
+              </div>
+            <% } else { %>
+              <p class="no-pizzas">No pizzas in this category yet.</p>
+            <% } %>
+
+            <div class="card-footer">
+              <a href="/menu?category=<%= category.id %>" class="view-link">
+                View all in menu →
+              </a>
+            </div>
+
+          </div>
+        <% }); %>
+      </div>
+
+    <% } %>
+
+  </div>
+
+  <footer>© 2024 Papa's Pizzeria. All rights reserved.</footer>
+
+</body>
+</html>

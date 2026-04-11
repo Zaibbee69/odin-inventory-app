@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon -e js,ejs,css,scss app.js"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "ejs": "^5.0.1",
     "express": "^5.2.1",
     "pg": "^8.20.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }
