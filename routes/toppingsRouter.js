@@ -5,6 +5,9 @@ const toppingsRouter = Router();
 
 
 toppingsRouter.get("/", toppingsController.getToppings)
+toppingsRouter.get("/new", toppingsController.addNewTopping)
+toppingsRouter.put("/:id/edit", toppingsController.editTopping)
+toppingsRouter.delete("/:id/", toppingsController.removeTopping)
 
 
 module.exports = toppingsRouter;

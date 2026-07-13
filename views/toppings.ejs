@@ -344,7 +344,7 @@
 
     <%# 
       Expected data from Express:
-      toppingsByCategory — array of objects:
+      toppings — array of objects:
         [
           {
             category: { id, name },
@@ -355,14 +355,14 @@
         ]
     %>
 
-    <% if (toppingsByCategory.length === 0) { %>
+    <% if (toppings.length === 0) { %>
       <div class="empty-state">
         <div class="empty-icon">🍕</div>
         <p>No toppings yet. Add your first one!</p>
       </div>
 
     <% } else { %>
-      <% toppingsByCategory.forEach(function(group) { %>
+      <% toppings.forEach(function(group) { %>
         <% if (group.toppings.length > 0) { %>
           <div class="category-section">
             <div class="category-header">
@@ -378,8 +378,8 @@
                 <div class="topping-card">
                   <span class="topping-name"><%= topping.name %></span>
                   <div class="topping-actions">
-                    <a href="/toppings/<%= topping.id %>/edit" class="action-btn" title="Edit">✏️</a>
-                    <form action="/toppings/<%= topping.id %>?_method=DELETE" method="POST">
+                    <a href="/<%= topping.id %>/edit" class="action-btn" title="Edit">✏️</a>
+                    <form action="/<%= topping.id %>?_method=DELETE" method="POST">
                       <button type="submit" class="action-btn delete" title="Delete"
                         onclick="return confirm('Remove <%= topping.name %>?')">🗑</button>
                     </form>
